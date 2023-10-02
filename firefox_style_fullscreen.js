@@ -1,3 +1,4 @@
+// maximize first
 let hr = setInterval(() => {
   const c = document.querySelector('#webview-container');
   const header = document.querySelector("#header");
