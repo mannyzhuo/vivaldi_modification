@@ -1,4 +1,3 @@
-// maximize first
 let hr = setInterval(() => {
   const c = document.querySelector('#webview-container');
   const header = document.querySelector("#header");
@@ -6,7 +5,7 @@ let hr = setInterval(() => {
   if(c){
     clearInterval(hr);
     const div = document.createElement('div');
-    div.style.height='1px';
+    div.style.height='9px';
     div.style.width='100vw';
     div.style.position='fixed';
     div.style.left='0';
