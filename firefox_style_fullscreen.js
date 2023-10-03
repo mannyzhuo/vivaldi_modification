@@ -17,10 +17,14 @@ let hr = setInterval(() => {
     div.style.top = "0";
     div.style.zIndex = 1;
     document.body.insertBefore(div, document.body.firstChild);
-    c.addEventListener("pointerenter", () => {
-      header.hidden=true;
+
+    function hide(){
       browser.classList.remove("address-top");
       browser.classList.add("address-top-off");
+    }
+    c.addEventListener("pointerenter", () => {
+      header.hidden=true;
+      hide();
       [...document.querySelectorAll('.tabbar-wrapper')].forEach(item=>item.hidden=true);
     });
     div.addEventListener("pointerenter", (e) => {
@@ -28,6 +32,11 @@ let hr = setInterval(() => {
       [...document.querySelectorAll('.tabbar-wrapper')].forEach(item=>item.hidden=false);
       browser.classList.remove("address-top-off");
       browser.classList.add("address-top");
+    });
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+         hide();
+      }
     });
   }
 }, 1111);
