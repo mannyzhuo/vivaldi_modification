@@ -22,7 +22,7 @@ let hr = setInterval(() => {
   if (c) {
     const style = document.createElement("style");
     style.appendChild(
-      document.createTextNode("[hidden] { display: none !important; }")
+      document.createTextNode(`[hidden] { display: none !important; }`)
     );
     document.head.appendChild(style);
 
@@ -40,6 +40,15 @@ let hr = setInterval(() => {
     div.style.zIndex = 1;
     document.body.insertBefore(div, document.body.firstChild);
 
+    const div2 = document.createElement("div");
+    div2.style.height = "100vh";
+    div2.style.width = "8px";
+    div2.style.position = "fixed";
+    div2.style.left = "0";
+    div2.style.top = "0";
+    div2.style.zIndex = 2;
+    document.body.insertBefore(div2, document.body.firstChild);
+
     function hide() {
       header.hidden = true;
       browser.classList.remove("address-top");
@@ -55,6 +64,7 @@ let hr = setInterval(() => {
       console.log('click');
     });
     div.addEventListener("pointerenter",show);
+    div2.addEventListener("pointerenter",show);
   }
 }, 1111);
 
