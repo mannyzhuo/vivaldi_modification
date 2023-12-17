@@ -1,12 +1,17 @@
 // you must uncheck "show address bar" in the page of "vivaldi://settings/addressbar/"
+// Do not set F11 in 'Fullscreen Mode'
 // this script set "Alt+X" to toggle address bar and tab bar
 
 let hr = setInterval(() => {
   const c = document.querySelector("#webview-container");
   const header = document.querySelector("#header");
   const browser = document.querySelector("#browser");
+  let fullscreenEnabled = false;
 
   function show() {
+    if (!fullscreenEnabled) {
+      return;
+    }
     header.hidden = false;
     [...document.querySelectorAll(".tabbar-wrapper")].forEach(
       (item) => (item.hidden = false)
@@ -15,8 +20,11 @@ let hr = setInterval(() => {
     browser.classList.add("address-top");
   }
 
-  function toggle(){
-    browser.classList.contains("address-top")?hide():show()
+  function toggle() {
+    if (!fullscreenEnabled) {
+      return;
+    }
+    browser.classList.contains("address-top") ? hide() : show();
   }
 
   if (c) {
@@ -26,9 +34,19 @@ let hr = setInterval(() => {
     );
     document.head.appendChild(style);
 
-    vivaldi.tabsPrivate.onKeyboardShortcut.addListener(
-      (id, combination) => combination === "Alt+X" && toggle()
-    );
+    vivaldi.tabsPrivate.onKeyboardShortcut.addListener((id, combination) => {
+      if(combination === "F11"){
+        if(fullscreenEnabled){
+          show();
+        }else{
+          hide(true)
+        }
+        setTimeout(()=>{
+          fullscreenEnabled = !fullscreenEnabled;
+        },111);
+      }
+      combination === "Alt+X" && toggle();
+    });
 
     clearInterval(hr);
     const div = document.createElement("div");
@@ -49,7 +67,10 @@ let hr = setInterval(() => {
     div2.style.zIndex = 2;
     document.body.insertBefore(div2, document.body.firstChild);
 
-    function hide() {
+    function hide(force) {
+      if (!force && !fullscreenEnabled) {
+        return;
+      }
       header.hidden = true;
       browser.classList.remove("address-top");
       browser.classList.add("address-top-off");
@@ -60,38 +81,7 @@ let hr = setInterval(() => {
     c.addEventListener("pointerenter", () => {
       hide();
     });
-    c.addEventListener('click',(e)=>{
-      console.log('click');
-    });
-    div.addEventListener("pointerenter",show);
-    div2.addEventListener("pointerenter",show);
+    div.addEventListener("pointerenter", show);
+    div2.addEventListener("pointerenter", show);
   }
 }, 1111);
-
-setTimeout(() => {
-  // Select the node that will be observed for mutations
-  const targetNode = document;
-
-  // Options for the observer (which mutations to observe)
-  const config = { attributes: true, childList: true, subtree: true };
-
-  // Callback function to execute when mutations are observed
-  const callback = (mutationList, observer) => {
-    // console.log(mutationList);
-    for (const mutation of mutationList) {
-      for (const i of mutation.addedNodes) {
-        if (i.id == "window-panel" || i.classList?.contains("panel-group")) {
-          setTimeout(() => {
-            const a = document.querySelector("#window-panel .tabsearch");
-            a && a.focus();
-          });
-        }
-      }
-    }
-  };
-
-  // Create an observer instance linked to the callback function
-  const observer = new MutationObserver(callback);
-  // Start observing the target node for configured mutations
-  observer.observe(targetNode, config);
-});
