@@ -1,0 +1,48 @@
+/* top */
+#header:not(:empty) {
+    display: none !important;
+}
+
+#app:has(.inner:not(:hover)) #header:not(:empty) {
+    display: flex !important;
+}
+
+
+/* left */
+
+:is(#app:has(#header:empty), #app:has(#header .tabless)) {
+    .tabbar-wrapper {
+        /* if you do not want auto toggle  tab bar, comment this line */
+        display: none !important;
+
+        &:hover {
+            display: flex !important;
+        }
+    }
+
+    .inner:has(.thumbnail-image) {
+        #tabs-container{
+            width:100%;
+        }
+        .tab-position {
+            position: relative;
+            height: var(--Width);
+            transform: none;
+        }
+
+        .tab.force-hover {
+            height: min-content;
+        }
+
+        .tab-wrapper {
+            max-height: fit-content;
+        }
+    }
+
+
+
+}
+
+#app:has(#panels-container:hover) .tabbar-wrapper {
+    display: flex !important;
+}
